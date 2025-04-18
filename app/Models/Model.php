@@ -8,6 +8,7 @@ use App\Core\Database;
  * Pour indiquer à l'IDE que $id peut etre un int
  * @property-read int $id 
  */
+
 //PDO(parent)->Database(enfant)->Model(petit enfant)->user(arrière petit enfant)
 abstract class Model extends Database
 {
@@ -170,9 +171,12 @@ abstract class Model extends Database
             //on 
             if (method_exists($this, $method)) { //method_exists verifie si la methode en deuxieme params existe dans l'objet ou class ($this correspond a toute les classes qu'on instancie User, Postes, etc)
                 if ($key === 'createdAt') {
-                    $valeur = new \DateTime($valeur);
+                    if ($valeur !== null) {
+                        $valeur = new \DateTime($valeur);
+                    } else {
+                        $valeur = new \DateTime('now');
+                    }
                 }
-
                 //On execute la méthode
                 $this->$method($valeur);
             }
@@ -183,27 +187,6 @@ abstract class Model extends Database
     //transforme objet simple ou un tableau d'objet simple en objet de type de l'instance 
     public function fetchHydrate(mixed $query): array|static|bool //mixed accepte à tout type 
     {
-        // var_dump($query);
-
-
-        //version Courte :
-
-        // if (is_array($query) && count($query) > 0) {
-        //     //boucle sur tableau de resultats pour instancier chaque objet
-        //     $data = [];
-
-        //     foreach ($query as $object) {
-        //         $data[] = (new static())->hydrate($object);
-        //     }
-        //     return $data;
-
-        // } else if (!empty($query)) {
-        //     //On transforme un objet standard -> on instancie un objet de la classe et on hydrate
-        //     return (new static)->hydrate($query); // static correspond à l'objet qu'on instancie
-
-        // } else {
-        //     return $query;
-        // }
 
         if (is_array($query) && count($query) > 0) {
             //Boucle sur le tableau de résultats pour instancier chaque objet

@@ -16,6 +16,8 @@ class User extends Model
         $this->table = "users";
     }
 
+
+
     public function connectUser(): self
     {
         // On stocke l'utilisateur dans la session
