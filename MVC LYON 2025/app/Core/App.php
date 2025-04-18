@@ -19,7 +19,7 @@ class App
      */
     public function start(): void
     {
-
+        session_start();
         //ETAPE 1: On nettoie nos URL:
 
         // On stocke l'URL du navigateur dans une variable

@@ -86,6 +86,10 @@ class Router
                 }
             }
         }
+
+        //une fois que toute les routes sont stocker dans l'array $routes (à l'initialisation)
+        //On stocke $routes en Session pour qu'une fois le routeur redemarer on conserve les routes
+        $_SESSION['routes'] = $this->routes;
     }
 
 
@@ -112,12 +116,12 @@ class Router
 
                 // On exécute la fonction avec tous les paramètres
                 // d'url de manière chronnologique
-                $controller->$actionName(...$params);  // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
+                //$controller->$actionName(...$params);  // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
 
                 $response = $controller->$actionName(...$params);
                 $response->send();
 
-                return ; 
+                return;
             }
         }
 
@@ -125,5 +129,15 @@ class Router
         http_response_code(404);
         echo '404 - Page not found';
         exit(404);
+    }
+
+    public function getUrl(string $name): ?string
+    {
+        foreach ($_SESSION['routes'] ?? [] as $route) {
+            if ($route['name'] === $name) {
+                return $route['url'];
+            }
+        }
+        return null;
     }
 }
