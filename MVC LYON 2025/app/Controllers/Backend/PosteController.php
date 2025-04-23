@@ -16,10 +16,13 @@ class PosteController extends AbstractController
     public function index(): Response
     {
         $postes = (new Poste)->findAll();
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(56));
 
 
-
-        return $this->render('backend/poste/index.php', ['postes' => $postes]);
+        return $this->render('backend/poste/index.php', [
+            'postes' => $postes,
+            'token' => $_SESSION['csrf_token'],
+        ]);
     }
 
     #[Route('admin.poste.create', '/admin/postes/create', ['GET', 'POST'])]
@@ -40,6 +43,7 @@ class PosteController extends AbstractController
                 ->setTitle($title)
                 ->setDescription($description)
                 ->setEnabled($enabled)
+                ->setUserId($_SESSION['USER']['id'])
                 ->create()
             ;
 
@@ -97,5 +101,37 @@ class PosteController extends AbstractController
         return $this->render('backend/poste/update.php', [
             'form' => $form->createForm(),
         ]);
+    }
+
+    #[Route('admin.poste.delete', '/admin/postes/([0-9]+)/delete', ['POST'])]
+
+    public function delete(int $id): Response
+    {
+        //on recupere le poste à supprimer
+        $poste = (new Poste)->find($id);
+
+        //Si le poste n'existe pas on redirige ver l'index avec un message d'erreur
+        if (!$poste) {
+            $this->addFlash('danger', 'le poste n\'existe pas !');
+
+            return $this->redirectToRoute('admin.poste.index');
+        }
+
+        //on verifie si le token en session est celui qu'on a recuperer
+        if ($_SESSION['csrf_token'] === $_POST['csrf_token'] ?? '') // si le token n'existe pas, on y insert une chaine de caracteres vide qui ne sera jamais égale au token csrf mais qui patchera les erreurs qui bloquerais le site
+        {
+
+            //On supprime le poste 
+            $poste->delete();
+
+            //on definit un message de succès
+            $this->addFlash('success', "Le poste a bien été supprimé");
+        } else {
+            //on definit un message d'erreur
+            $this->addFlash('danger', "Le token CSRF est invalide !");
+        }
+
+        //on redirige vers l'index dans tout les cas 
+        return $this->redirectToRoute('admin.poste.index');
     }
 }
