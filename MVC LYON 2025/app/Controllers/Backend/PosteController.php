@@ -10,13 +10,15 @@ use App\Models\Poste;
 
 class PosteController extends AbstractController
 {
-    #[Route('admin.poste.index', '/admin/poste', ['GET'])]
+    #[Route('admin.poste.index', '/admin/postes', ['GET'])]
 
     public function index(): Response
     {
         $postes = (new Poste)->findAll();
 
 
-        return $this->render('backend/poste/index.php', ['poste' => $postes,]);
+
+        return $this->render('backend/poste/index.php', ['postes' => $postes]);
+      
     }
 }

@@ -19,6 +19,7 @@ abstract class AbstractController
         extract($data);
 
 
+
         /**On veut rendre le contenu de la view parente base.php
          * Cette view affiche le contenue des views enfants
          * Pour cela on doit stocker le contenu dans la variable $content

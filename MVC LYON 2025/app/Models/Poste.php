@@ -9,7 +9,7 @@ class Poste extends Model
         protected ?int $id = null,
         protected ?string $title = null,
         protected ?string $description = null,
-        protected ?\DateTime $created_at = null,
+        protected ?\DateTime $createdAt = null,
         protected ?bool $enabled = null
 
     ) {
@@ -95,7 +95,7 @@ class Poste extends Model
      */
     public function getCreatedAt(): ?\DateTime
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     /**
@@ -105,9 +105,9 @@ class Poste extends Model
      *
      * @return self
      */
-    public function setCreatedAt(?\DateTime $created_at): self
+    public function setCreatedAt(?\DateTime $createdAt): self
     {
-        $this->created_at = $created_at;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
