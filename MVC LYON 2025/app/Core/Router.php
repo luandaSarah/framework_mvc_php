@@ -10,6 +10,9 @@ class Router
 {
     private array $routes = []; //contient l'ensemble de nos routes
 
+    private const ADMIN_URL = '/admin';
+    private const LOGIN_URL = '/login';
+
     /**
      * fonction stockant dans l'array $route contenant l'ensemble des routes de nos applications
      * 
@@ -101,7 +104,7 @@ class Router
     {
         //on verifie si l'url commence par '/admin/'
 
-        if (preg_match("~^/admin~", $url)) {
+        if (preg_match("~^" . self::ADMIN_URL . "~", $url)) {
 
             //on verife si l'utilisateur est connecté Et qu'il a le rôle admin
 
@@ -109,7 +112,7 @@ class Router
                 $_SESSION['flash']['danger'] = "Vous n'avez pas accés à cette page";
 
                 //On redirigie ver la page de connexion
-                $response = new Response('', 403, ['location' => '/login']);
+                $response = new Response('', 403, ['location' => self::LOGIN_URL]);
                 $response->send();
 
                 return;

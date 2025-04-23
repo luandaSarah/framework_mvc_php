@@ -106,12 +106,18 @@ class Form
 
         return $this;
     }
-
-    public function addButton(string $text, array $attributes = []): static
+    public function addTextarea(string $name, string $content, array $attributes = []): static
     {
-        $this->formCode .= "<button type\"submit\"" . $this->addAtributes($attributes) . ">$text</button>";
+        $this->formCode .= "<textarea name=\"$name\"" . $this->addAtributes($attributes) . ">$content</textarea>";
         return $this;
     }
+    
+    public function addButton(string $text, array $attributes = []): static
+    {
+        $this->formCode .= "<button type=\"submit\"" . $this->addAtributes($attributes) . ">$text</button>";
+        return $this;
+    }
+    
 
 
     /**
