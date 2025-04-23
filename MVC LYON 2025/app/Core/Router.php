@@ -133,11 +133,12 @@ class Router
                 $params = array_slice($matches, 1);    // on enleve le premier '/' car il ne nous sert pas trop ici (ici on a pas besoin de l'url)
 
 
-                // On exécute la fonction avec tous les paramètres
-                // d'url de manière chronnologique
-                //$controller->$actionName(...$params);  // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
+                // On recupere les paramettre de notre url ex= id
+                //on lance response qui correspond à l'appelle d'une methode qui recupere dynamiquement des données
+                //ex= /user/1, 
+                //on passe en paramettre l'id de la metthode qui s'occupe de recup 1 user ce qui correspond à params
+                $response = $controller->$actionName(...$params);     // ! On veut extirper chaque élément du tableau et on va le passer comme paramètres
 
-                $response = $controller->$actionName(...$params);
                 $response->send();
 
                 return;

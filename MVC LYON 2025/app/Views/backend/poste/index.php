@@ -13,7 +13,7 @@
                         <em class="text-muted d-block mb-3"><?= $poste->getCreatedAt()->format('Y/m/d'); ?></em>
                         <p class="card-text"><?= $poste->getDescription(); ?></p>
                         <div class="d-flex justify-content-between mt-3">
-                            <a href="#" class="btn btn-warning">Modifier</a>
+                            <a href="/admin/postes/<?= $poste->getId(); ?>/edit" class="btn btn-warning">Modifier</a>
                             <a href="#" class="btn btn-danger">Supprimer</a>
                         </div>
                     </div>

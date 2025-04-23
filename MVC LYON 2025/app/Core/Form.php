@@ -106,18 +106,18 @@ class Form
 
         return $this;
     }
-    public function addTextarea(string $name, string $content, array $attributes = []): static
+    public function addTextarea(string $name, ?string $content=null, array $attributes = []): static
     {
         $this->formCode .= "<textarea name=\"$name\"" . $this->addAtributes($attributes) . ">$content</textarea>";
         return $this;
     }
-    
+
     public function addButton(string $text, array $attributes = []): static
     {
         $this->formCode .= "<button type=\"submit\"" . $this->addAtributes($attributes) . ">$text</button>";
         return $this;
     }
-    
+
 
 
     /**
@@ -127,21 +127,23 @@ class Form
      */
     public function addAtributes(array $attributes): string
     {
-        //On crée une chaine de caractères vide
-        $attributeString = "";
+        /// On crée une chaîne de caractères vide
+        $attributsString = '';
 
-        $short = ['checked', 'disabled', 'readonly', 'selected', 'multiple', 'required'];
+        $courts = ['checked', 'disabled', 'readonly', 'selected', 'multiple', 'required'];
 
         foreach ($attributes as $key => $value) {
-
-            //On vérifie si c'est un attribut court
-            if (in_array($key, $short)) {
-                $attributeString .= " $key";
-            } else {
-                $attributeString .= " $key=\"$value\"";
+            if ($value) {
+                // On vérifie si c'est un attribut court
+                if (in_array($key, $courts)) {
+                    $attributsString .= " $key";
+                } else {
+                    $attributsString .= " $key=\"$value\"";
+                }
             }
         }
-        return $attributeString;
+
+        return $attributsString;
     }
 
     /**
