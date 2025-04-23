@@ -14,8 +14,8 @@ class Database extends PDO //herite de tout dans PDO ainsi que son construct
 {
     private static ?self $instance = null;
 
-    private const DB_HOST = 'mini_indeed-db-1';
-    private const DB_NAME = 'mini_indeed';
+    private const DB_HOST = 'mvclyon2025-db-1';
+    private const DB_NAME = 'mvc_cours';
     private const DB_USER = 'root';
     private const DB_PASSWORD = 'root';
 
