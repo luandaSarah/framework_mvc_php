@@ -18,10 +18,21 @@ class PosteController extends AbstractController
         $postes = (new Poste)->findAll();
         $_SESSION['csrf_token'] = bin2hex(random_bytes(56));
 
-
+    
         return $this->render('backend/poste/index.php', [
             'postes' => $postes,
             'token' => $_SESSION['csrf_token'],
+
+            //pour personnaliser les infos du header pour chaque pages dynamiquemnent
+            'meta' => [
+                'title' => 'Administration des postes',
+            ],
+            'scripts' => [
+                '/assets/js/switchVisibilityPoste.js',
+            ],
+            // 'styles' =>[
+            //     '/assets/styles/postes'
+            // ]
         ]);
     }
 
@@ -104,7 +115,6 @@ class PosteController extends AbstractController
     }
 
     #[Route('admin.poste.delete', '/admin/postes/([0-9]+)/delete', ['POST'])]
-
     public function delete(int $id): Response
     {
         //on recupere le poste à supprimer
@@ -133,5 +143,50 @@ class PosteController extends AbstractController
 
         //on redirige vers l'index dans tout les cas 
         return $this->redirectToRoute('admin.poste.index');
+    }
+
+    #[Route('admin.poste.switch', '/admin/api/postes/([0-9]+)/switch', ['GET'])]
+    public function switch(int $id): Response
+    {
+        //On récupère le poste à modifier
+        $poste = (new Poste)->find($id);
+
+        //Si le poste n'existe pas, on renvoie une erreur 404
+
+        if (!$poste) {
+            $content = [
+                'status' => 'error',
+                'message' => 'Le poste n\'existe pas !',
+            ];
+
+            //en procedural
+            // header('Content-Type: application/json');
+            // http_response_code(404);
+            // echo json_encode($content);
+            return new Response(
+                json_encode($content),
+                404,
+                ['Content-Type' => 'application/json'],
+
+            );
+        }
+        //On inverse la visibilité du poste et on update la bdd
+        $poste
+            ->setEnabled(!$poste->getEnabled())
+            ->Update();
+
+        //On definit le contenu de la reponse
+        $content = [
+            'status' => 'success',
+            'message' => 'Le poste a été mis à jour avec succèss !',
+            'enabled' => $poste->getEnabled(),
+        ];
+
+        //on renvoie la reponse au format JSON
+        return new Response(
+            json_encode($content),
+            201,
+            ['Content-Type' => 'application/json'],
+        );
     }
 }
